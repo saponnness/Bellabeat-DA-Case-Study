@@ -362,6 +362,7 @@ However upon further examination of the hourly activity intensity, which can be 
 - Very Light: 2.9%
 - Light: 0.69%
 - Moderate: 0.02%
+
 The pie chart reveals that the largest proportion of intensity values falls under the Nothing level, reaching a significant 88.2%. This indicates that this particular group engages in very minimal physical activity.
 
 #### Minute Activity
