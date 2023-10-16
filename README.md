@@ -160,6 +160,7 @@ The step_total data is pulled from the dailySteps table and merge with the daily
 - Lightly active: 5,000 to 7,499 steps per day
 - Moderately active: 7,500 to 9,999 steps per day
 - Very active: more than 10,000 steps per day
+
 The reference for this information can be found at [Counting Your Steps](https://www.10000steps.org.au/articles/healthy-lifestyles/counting-steps/).
 
 #### Hourly Activity
