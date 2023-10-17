@@ -1,4 +1,3 @@
-
 ![Logo](https://logowik.com/content/uploads/images/bellabeat3809.jpg)
 
 # Bellabeat DA Case-Study
@@ -21,7 +20,7 @@ Identify usage patterns of smart devices to gain insights and use them to guide 
 - The data is stored in 18 .csv files and provides data on physical activity, heart rate, steps, sleep monitoring and more.
 - These data are recorded in daily, hourly, and minute formats and are recorded in date ranges. 04.12.2016-05.12.2016
 
-## Organization and Transformation of Data.
+## Organization and Transformation of Data
 
 We will use the PostgreSQL tool to organize and transform our data. We chose this tool because it is free to download, highly effective, and easy to use.
 
@@ -31,8 +30,8 @@ We should convert the data in the METs column as several websites suggest that t
 
 ```SQL
 SELECT 
-	MAX(mets) max_mets,
-	MIN(mets) min_mets
+ MAX(mets) max_mets,
+ MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
 
@@ -52,8 +51,8 @@ Then, we will use the command to recheck the highest and lowest values to verify
 
 ```SQL
 SELECT 
-	MAX(mets) max_mets,
-	MIN(mets) min_mets
+ MAX(mets) max_mets,
+ MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
 
@@ -64,7 +63,7 @@ Output:
 
 It is evident that our METs values are based on reality.
 
-## Organization and Transformation of Data.
+## Organization and Transformation of Data
 
 We will use the PostgreSQL tool to organize and transform our data. We chose this tool because it is free to download, highly effective, and easy to use.
 
@@ -74,8 +73,8 @@ We should convert the data in the METs column as several websites suggest that t
 
 ```SQL
 SELECT 
-	MAX(mets) max_mets,
-	MIN(mets) min_mets
+ MAX(mets) max_mets,
+ MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
 
@@ -90,14 +89,16 @@ The METs in the minuteMETs table have a maximum value of 157, which is impossibl
 UPDATE public."minuteMETs"
 SET mets = mets / 10.0
 ```
+
 Then, we will use the command to recheck the highest and lowest values to verify if our objectives can be achieved.
 
 ```SQL
 SELECT 
-	MAX(mets) max_mets,
-	MIN(mets) min_mets
+ MAX(mets) max_mets,
+ MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
+
 Output:
 |   | max_mets | min_mets |
 |---|----------|----------|
@@ -120,29 +121,29 @@ We will begin merging data from all tables related to daily activities, which in
 
 ```SQL
 SELECT 
-	*, 	
-	CASE 
-        WHEN step_total > 10000
-        THEN 'Very Active'
-		
-        WHEN step_total BETWEEN 7500 AND 9999
-        THEN 'Moderately Active'
-		
-        WHEN step_total BETWEEN 5000 AND 7499
-        THEN 'Light Active'
-		
-        ELSE 'Sedentary'
+ *,  
+ CASE 
+  WHEN step_total > 10000
+  THEN 'Very Active'
+  
+  WHEN step_total BETWEEN 7500 AND 9999
+  THEN 'Moderately Active'
+  
+  WHEN step_total BETWEEN 5000 AND 7499
+  THEN 'Light Active'
+  
+  ELSE 'Sedentary'
     
-    END active_distance_level
+ END active_distance_level
 FROM 
-	(SELECT
-		dailyActivity.*,               
-		dailySteps.step_total          
-	FROM public."dailyActivity" dailyActivity
+ (SELECT
+  dailyActivity.*,               
+  dailySteps.step_total          
+ FROM public."dailyActivity" dailyActivity
 
-	JOIN public."dailySteps" dailySteps
-	ON dailyActivity.id = dailySteps.id
-	AND dailyActivity.activity_date = dailySteps.activity_day) dailyActive
+ JOIN public."dailySteps" dailySteps
+ ON dailyActivity.id = dailySteps.id
+ AND dailyActivity.activity_date = dailySteps.activity_day) dailyActive
 ```
 
 Output:
@@ -160,6 +161,7 @@ The step_total data is pulled from the dailySteps table and merge with the daily
 - Lightly active: 5,000 to 7,499 steps per day
 - Moderately active: 7,500 to 9,999 steps per day
 - Very active: more than 10,000 steps per day
+
 The reference for this information can be found at [Counting Your Steps](https://www.10000steps.org.au/articles/healthy-lifestyles/counting-steps/).
 
 #### Hourly Activity
@@ -167,43 +169,44 @@ The reference for this information can be found at [Counting Your Steps](https:/
 Next, we will follow the same approach as the first method, which involves gathering data from all tables associated with hourly activities. This includes the tables hourlyCalories, hourlyIntensities, and hourlySteps.
 
 ```SQL
-  SELECT 
-	*,  
-	CASE
-		WHEN total_intensity = 180
-		THEN 'Moderate'
-		
-		WHEN total_intensity BETWEEN 120 AND 179
-		THEN 'Light'
-		
-		WHEN total_intensity BETWEEN 60 AND 119
-		THEN 'Very Light'
+SELECT 
+ *,  
+ CASE
+  WHEN total_intensity = 180
+  THEN 'Moderate'
+  
+  WHEN total_intensity BETWEEN 120 AND 179
+  THEN 'Light'
+  
+  WHEN total_intensity BETWEEN 60 AND 119
+  THEN 'Very Light'
 
-		WHEN total_intensity BETWEEN 30 AND 59
-		THEN 'Just Noticeable'
-		
-		WHEN total_intensity BETWEEN 0 AND 29
-		THEN 'Nothing'
-		
-	END intensity_level
-	
+  WHEN total_intensity BETWEEN 30 AND 59
+  THEN 'Just Noticeable'
+  
+  WHEN total_intensity BETWEEN 0 AND 29
+  THEN 'Nothing'
+  
+ END intensity_level
+ 
 FROM
-	(SELECT 
-		hourlyCalories.*,           		 
-		hourlyIntensities.total_intensity,   
-		hourlyIntensities.average_intensity, 
-		hourlySteps.step_total               
-	FROM
-		public."hourlyCalories" hourlyCalories
+ (SELECT 
+  hourlyCalories.*,              
+  hourlyIntensities.total_intensity,   
+  hourlyIntensities.average_intensity, 
+  hourlySteps.step_total               
+ FROM
+  public."hourlyCalories" hourlyCalories
 
-	JOIN public."hourlyIntensities" hourlyIntensities
-	ON hourlyCalories.id = hourlyIntensities.id 
-	AND hourlyCalories.activity_hour = hourlyIntensities.activity_hour
+ JOIN public."hourlyIntensities" hourlyIntensities
+ ON hourlyCalories.id = hourlyIntensities.id 
+ AND hourlyCalories.activity_hour = hourlyIntensities.activity_hour
 
-	JOIN public."hourlySteps" hourlySteps
-	ON hourlyCalories.id = hourlySteps.id 
-	AND hourlyCalories.activity_hour = hourlySteps.activity_hour) hourlyActive
+ JOIN public."hourlySteps" hourlySteps
+ ON hourlyCalories.id = hourlySteps.id 
+ AND hourlyCalories.activity_hour = hourlySteps.activity_hour) hourlyActive
 ```
+
 Output:
 |   |     id      |     activity_hour     | calories | total_intensity | average_intensity | step_total | intensity_level |
 |---|------------|-----------------------|----------|------------------|-------------------|------------|-----------------|
@@ -227,56 +230,56 @@ Step 3: Aggregate data from all tables related to minute activities, including m
 
 ```SQL
 SELECT 
-	*,  
-	CASE
-		WHEN intensity = 3
-		THEN 'Moderate'
-		
-		WHEN intensity = 2
-		THEN 'Light'
-		
-		WHEN intensity = 1
-		THEN 'Very Light'
-		
-		WHEN intensity = 0
-		THEN 'Nothing'
-		
-	END intensity_level,
-	
-	CASE
-		WHEN mets > 6
-		THEN 'Vigorous Intensity'
-		
-		WHEN mets BETWEEN 3.01 AND 6
-		THEN 'Moderate Intensity'
-		
-		WHEN mets BETWEEN 1.6 AND 3
-		THEN 'Light Intensity'
-		
-		WHEN mets BETWEEN 0 AND 1.59
-		THEN 'Sedentary'
-		
-	END mets_level
-	
+ *,  
+ CASE
+  WHEN intensity = 3
+  THEN 'Moderate'
+  
+  WHEN intensity = 2
+  THEN 'Light'
+  
+  WHEN intensity = 1
+  THEN 'Very Light'
+  
+  WHEN intensity = 0
+  THEN 'Nothing'
+  
+ END intensity_level,
+ 
+ CASE
+  WHEN mets > 6
+  THEN 'Vigorous Intensity'
+  
+  WHEN mets BETWEEN 3.01 AND 6
+  THEN 'Moderate Intensity'
+  
+  WHEN mets BETWEEN 1.6 AND 3
+  THEN 'Light Intensity'
+  
+  WHEN mets BETWEEN 0 AND 1.59
+  THEN 'Sedentary'
+  
+ END mets_level
+ 
 FROM
-	(SELECT 
-		minuteCalories.*,                 
-		minuteIntensities.intensity,      
-		minuteMETs.mets,                  
-		minuteSteps.steps                 
-	FROM public."minuteCaloriesNarrow" minuteCalories
+ (SELECT 
+  minuteCalories.*,                 
+  minuteIntensities.intensity,      
+  minuteMETs.mets,                  
+  minuteSteps.steps                 
+ FROM public."minuteCaloriesNarrow" minuteCalories
 
-	JOIN public."minuteIntensitiesNarrow" minuteIntensities
-	ON minuteCalories.id = minuteIntensities.id
-	AND minuteCalories.activity_minute = minuteIntensities.activity_minute
+ JOIN public."minuteIntensitiesNarrow" minuteIntensities
+ ON minuteCalories.id = minuteIntensities.id
+ AND minuteCalories.activity_minute = minuteIntensities.activity_minute
 
-	JOIN public."minuteMETs" minuteMETs
-	ON minuteCalories.id = minuteMETs.id
-	AND minuteCalories.activity_minute = minuteMETs.activity_minute
+ JOIN public."minuteMETs" minuteMETs
+ ON minuteCalories.id = minuteMETs.id
+ AND minuteCalories.activity_minute = minuteMETs.activity_minute
 
-	JOIN public."minuteStepsNarrow" minuteSteps
-	ON minuteCalories.id = minuteSteps.id
-	AND minuteCalories.activity_minute = minuteSteps.activity_minute) minuteActive
+ JOIN public."minuteStepsNarrow" minuteSteps
+ ON minuteCalories.id = minuteSteps.id
+ AND minuteCalories.activity_minute = minuteSteps.activity_minute) minuteActive
 ```
 
 Output:
@@ -313,8 +316,8 @@ Finally, before using the data in the data creation step, Visualization retrieve
 
 ```SQL
 SELECT 
-	*,
-	(total_time_in_bed - total_minutes_asleep) AS total_time_before_asleep
+ *,
+ (total_time_in_bed - total_minutes_asleep) AS total_time_before_asleep
 FROM public."sleepDay"
 ```
 
@@ -362,6 +365,7 @@ However upon further examination of the hourly activity intensity, which can be 
 - Very Light: 2.9%
 - Light: 0.69%
 - Moderate: 0.02%
+
 The pie chart reveals that the largest proportion of intensity values falls under the Nothing level, reaching a significant 88.2%. This indicates that this particular group engages in very minimal physical activity.
 
 #### Minute Activity
@@ -398,16 +402,16 @@ For more details on creating an Activity, please refer to my Visualizations avai
 
 ## Conclusion and Recommendations
 
-#### Recommendations for improving movement activities for this group:
+#### Recommendations for improving movement activities for this group
 
 - Based on the analysis, it appears that this group of women engages in relatively little movement activity, particularly at the hourly and minute levels. This suggests that the group may consist of working-age individuals who spend most of their time sitting and working.
 
-#### Advice for improving sleep quality:
+#### Advice for improving sleep quality
 
 - Most individuals in this group appear to get sufficient rest, and the app detects a relatively short time to enter the sleep cycle.
 - However, some individuals take longer than average to enter the sleep cycle, which may indicate stress and anxiety related to work.
 
-#### Instructions for utilizing smart devices:
+#### Instructions for utilizing smart devices
 
 - Based on data analysis and trends in smart device usage, I recommend that the app incorporate a coach feature to remind individuals to move or stretch periodically.
 - Additionally, I suggest adding a stress relief app feature to help individuals who may experience stress from prolonged periods of work to relax.
