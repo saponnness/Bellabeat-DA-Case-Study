@@ -30,8 +30,8 @@ We should convert the data in the METs column as several websites suggest that t
 
 ```SQL
 SELECT 
- MAX(mets) max_mets,
- MIN(mets) min_mets
+	MAX(mets) max_mets,
+	MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
 
@@ -51,8 +51,8 @@ Then, we will use the command to recheck the highest and lowest values to verify
 
 ```SQL
 SELECT 
- MAX(mets) max_mets,
- MIN(mets) min_mets
+	MAX(mets) max_mets,
+	MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
 
@@ -73,8 +73,8 @@ We should convert the data in the METs column as several websites suggest that t
 
 ```SQL
 SELECT 
- MAX(mets) max_mets,
- MIN(mets) min_mets
+	MAX(mets) max_mets,
+	MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
 
@@ -94,8 +94,8 @@ Then, we will use the command to recheck the highest and lowest values to verify
 
 ```SQL
 SELECT 
- MAX(mets) max_mets,
- MIN(mets) min_mets
+	MAX(mets) max_mets,
+	MIN(mets) min_mets
 FROM public."minuteMETs"
 ```
 
@@ -121,29 +121,29 @@ We will begin merging data from all tables related to daily activities, which in
 
 ```SQL
 SELECT 
- *,  
- CASE 
-  WHEN step_total > 10000
-  THEN 'Very Active'
+	*,  
+	CASE 
+		WHEN step_total > 10000
+		THEN 'Very Active'
   
-  WHEN step_total BETWEEN 7500 AND 9999
-  THEN 'Moderately Active'
+		WHEN step_total BETWEEN 7500 AND 9999
+		THEN 'Moderately Active'
   
-  WHEN step_total BETWEEN 5000 AND 7499
-  THEN 'Light Active'
+		WHEN step_total BETWEEN 5000 AND 7499
+		THEN 'Light Active'
   
-  ELSE 'Sedentary'
+		ELSE 'Sedentary'
     
- END active_distance_level
+	END active_distance_level
 FROM 
- (SELECT
-  dailyActivity.*,               
-  dailySteps.step_total          
- FROM public."dailyActivity" dailyActivity
+	(SELECT
+		dailyActivity.*,               
+		dailySteps.step_total          
+	FROM public."dailyActivity" dailyActivity
 
- JOIN public."dailySteps" dailySteps
- ON dailyActivity.id = dailySteps.id
- AND dailyActivity.activity_date = dailySteps.activity_day) dailyActive
+	JOIN public."dailySteps" dailySteps
+	ON dailyActivity.id = dailySteps.id
+	AND dailyActivity.activity_date = dailySteps.activity_day) dailyActive
 ```
 
 Output:
@@ -170,41 +170,41 @@ Next, we will follow the same approach as the first method, which involves gathe
 
 ```SQL
 SELECT 
- *,  
- CASE
-  WHEN total_intensity = 180
-  THEN 'Moderate'
+	*,  
+	CASE
+		WHEN total_intensity = 180
+		THEN 'Moderate'
+		
+		WHEN total_intensity BETWEEN 120 AND 179
+		THEN 'Light'
   
-  WHEN total_intensity BETWEEN 120 AND 179
-  THEN 'Light'
-  
-  WHEN total_intensity BETWEEN 60 AND 119
-  THEN 'Very Light'
+		WHEN total_intensity BETWEEN 60 AND 119
+		THEN 'Very Light'
 
-  WHEN total_intensity BETWEEN 30 AND 59
-  THEN 'Just Noticeable'
+		WHEN total_intensity BETWEEN 30 AND 59
+		THEN 'Just Noticeable'
   
-  WHEN total_intensity BETWEEN 0 AND 29
-  THEN 'Nothing'
+		WHEN total_intensity BETWEEN 0 AND 29
+		THEN 'Nothing'
   
- END intensity_level
+ 	END intensity_level
  
 FROM
- (SELECT 
-  hourlyCalories.*,              
-  hourlyIntensities.total_intensity,   
-  hourlyIntensities.average_intensity, 
-  hourlySteps.step_total               
- FROM
-  public."hourlyCalories" hourlyCalories
+	(SELECT 
+		hourlyCalories.*,              
+		hourlyIntensities.total_intensity,   
+		hourlyIntensities.average_intensity, 
+		hourlySteps.step_total               
+	FROM
+		public."hourlyCalories" hourlyCalories
 
- JOIN public."hourlyIntensities" hourlyIntensities
- ON hourlyCalories.id = hourlyIntensities.id 
- AND hourlyCalories.activity_hour = hourlyIntensities.activity_hour
+	JOIN public."hourlyIntensities" hourlyIntensities
+	ON hourlyCalories.id = hourlyIntensities.id 
+	AND hourlyCalories.activity_hour = hourlyIntensities.activity_hour
 
- JOIN public."hourlySteps" hourlySteps
- ON hourlyCalories.id = hourlySteps.id 
- AND hourlyCalories.activity_hour = hourlySteps.activity_hour) hourlyActive
+ 	JOIN public."hourlySteps" hourlySteps
+ 	ON hourlyCalories.id = hourlySteps.id 
+ 	AND hourlyCalories.activity_hour = hourlySteps.activity_hour) hourlyActive
 ```
 
 Output:
@@ -230,56 +230,56 @@ Step 3: Aggregate data from all tables related to minute activities, including m
 
 ```SQL
 SELECT 
- *,  
- CASE
-  WHEN intensity = 3
-  THEN 'Moderate'
+	*,  
+ 	CASE
+  		WHEN intensity = 3
+  		THEN 'Moderate'
   
-  WHEN intensity = 2
-  THEN 'Light'
+  		WHEN intensity = 2
+  		THEN 'Light'
   
-  WHEN intensity = 1
-  THEN 'Very Light'
+  		WHEN intensity = 1
+  		THEN 'Very Light'
   
-  WHEN intensity = 0
-  THEN 'Nothing'
+  		WHEN intensity = 0
+  		THEN 'Nothing'
   
- END intensity_level,
+ 	END intensity_level,
  
- CASE
-  WHEN mets > 6
-  THEN 'Vigorous Intensity'
+ 	CASE
+ 		WHEN mets > 6
+ 		THEN 'Vigorous Intensity'
   
-  WHEN mets BETWEEN 3.01 AND 6
-  THEN 'Moderate Intensity'
+  		WHEN mets BETWEEN 3.01 AND 6
+  		THEN 'Moderate Intensity'
   
-  WHEN mets BETWEEN 1.6 AND 3
-  THEN 'Light Intensity'
+ 		WHEN mets BETWEEN 1.6 AND 3
+ 		THEN 'Light Intensity'
   
-  WHEN mets BETWEEN 0 AND 1.59
-  THEN 'Sedentary'
+  		WHEN mets BETWEEN 0 AND 1.59
+ 		THEN 'Sedentary'
   
- END mets_level
+ 	END mets_level
  
 FROM
- (SELECT 
-  minuteCalories.*,                 
-  minuteIntensities.intensity,      
-  minuteMETs.mets,                  
-  minuteSteps.steps                 
- FROM public."minuteCaloriesNarrow" minuteCalories
+ 	(SELECT 
+  		minuteCalories.*,                 
+  		minuteIntensities.intensity,      
+  		minuteMETs.mets,                  
+  		minuteSteps.steps                 
+ 	FROM public."minuteCaloriesNarrow" minuteCalories
 
- JOIN public."minuteIntensitiesNarrow" minuteIntensities
- ON minuteCalories.id = minuteIntensities.id
- AND minuteCalories.activity_minute = minuteIntensities.activity_minute
+ 	JOIN public."minuteIntensitiesNarrow" minuteIntensities
+ 	ON minuteCalories.id = minuteIntensities.id
+ 	AND minuteCalories.activity_minute = minuteIntensities.activity_minute
 
- JOIN public."minuteMETs" minuteMETs
- ON minuteCalories.id = minuteMETs.id
- AND minuteCalories.activity_minute = minuteMETs.activity_minute
+ 	JOIN public."minuteMETs" minuteMETs
+ 	ON minuteCalories.id = minuteMETs.id
+ 	AND minuteCalories.activity_minute = minuteMETs.activity_minute
 
- JOIN public."minuteStepsNarrow" minuteSteps
- ON minuteCalories.id = minuteSteps.id
- AND minuteCalories.activity_minute = minuteSteps.activity_minute) minuteActive
+ 	JOIN public."minuteStepsNarrow" minuteSteps
+ 	ON minuteCalories.id = minuteSteps.id
+ 	AND minuteCalories.activity_minute = minuteSteps.activity_minute) minuteActive
 ```
 
 Output:
@@ -316,8 +316,8 @@ Finally, before using the data in the data creation step, Visualization retrieve
 
 ```SQL
 SELECT 
- *,
- (total_time_in_bed - total_minutes_asleep) AS total_time_before_asleep
+ 	*,
+ 	(total_time_in_bed - total_minutes_asleep) AS total_time_before_asleep
 FROM public."sleepDay"
 ```
 
