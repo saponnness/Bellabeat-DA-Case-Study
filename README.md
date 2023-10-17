@@ -19,7 +19,7 @@ Identify usage patterns of smart devices to gain insights and use them to guide 
 
 - Fitbit Fitness Tracker Data (CC0: Public Domain, dataset made available through Mobius): This Kaggle dataset includes personal fitness tracker data from 30 Fitbit users. 
 - The data is stored in 18 .csv files and provides data on physical activity, heart rate, steps, sleep monitoring and more.
-- These data are recorded in daily, hourly, and minute formats and are recorded in date ranges. 04.12.2016-05.12.2016
+- These data are recorded in daily, hourly, and minute formats and are recorded in date ranges. 04.12.2016 to 05.12.2016
 
 ## Organization and Transformation of Data.
 
