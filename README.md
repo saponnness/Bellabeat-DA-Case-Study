@@ -175,11 +175,11 @@ Output:
 
 We pull the total_intensity and average_intensity from the table. We also pull the hourlyIntensities and step_total data from the hourlySteps table, and combine it with the data in the hourlyCalories table to obtain information about all hourly activities. To categorize intensity values, we create an intensity_level column based on the [Rated Perceived Exertion (RPE) Scale](https://my.clevelandclinic.org/health/articles/17450-rated-perceived-exertion-rpe-scale) website. However, since this website and others present intensity data per minutes, we require data that indicates hourly activity and the total_intensity column. Intensity values are also recorded at the hourly level. Therefore, we take the intensity range from the website and multiply it by 60 to accurately classify the intensity. The intensity categories are divided as follows:
 
-- 0 to 29 - Nothing
-- 30 to 59 - Just noticeable
-- 60 to 119 - Very Light
-- 120 to 179 - Light
-- 180 - Moderate
+- 0 to 29 – Nothing
+- 30 to 59 – Just noticeable
+- 60 to 119 – Very Light
+- 120 to 179 – Light
+- 180 – Moderate
 
 #### Minute Activity
 
@@ -260,10 +260,10 @@ Read more about the [Rated Perceived Exertion (RPE) Scale](https://my.clevelandc
 
 We have classified mets into the following categories:
 
-- 0 to 1.59 - Sedentary
-- 1.6 to 3 - Light Intensity
-- 3.01 to 6 - Moderate intensity
-- 6 and above - Vigorous intensity
+- 0 to 1.59 – Sedentary
+- 1.6 to 3 – Light Intensity
+- 3.01 to 6 – Moderate intensity
+- 6 and above – Vigorous intensity
 
 For more information, visit [Staying Active | The Nutrition Source | Harvard T.H. Chan School of Public Health](https://www.hsph.harvard.edu/nutritionsource/staying-active/).
 
