@@ -63,49 +63,6 @@ Output:
 
 It is evident that our METs values are based on reality.
 
-## Organization and Transformation of Data
-
-We will use the PostgreSQL tool to organize and transform our data. We chose this tool because it is free to download, highly effective, and easy to use.
-
-### Transformation of the minutesMETs table
-
-We should convert the data in the METs column as several websites suggest that the provided information not exceed 10 METs per minute. However, after researching with ChatGPT, I found that the METs should not exceed 20 per minute. For further information, visit: [Staying Active | The Nutrition Source | Harvard T.H. Chan School of Public Health](https://www.hsph.harvard.edu/nutritionsource/staying-active/).
-
-```SQL
-SELECT 
-	MAX(mets) max_mets,
-	MIN(mets) min_mets
-FROM public."minuteMETs"
-```
-
-Output:
-|      | max_mets | min_mets |
-|------|----------|----------|
-|  1   |   157    |    0     |
-
-The METs in the minuteMETs table have a maximum value of 157, which is impossible. We conducted a data transformation by dividing the METs column by 10.0 to rectify any erroneous data.
-
-```SQL
-UPDATE public."minuteMETs"
-SET mets = mets / 10.0
-```
-
-Then, we will use the command to recheck the highest and lowest values to verify if our objectives can be achieved.
-
-```SQL
-SELECT 
-	MAX(mets) max_mets,
-	MIN(mets) min_mets
-FROM public."minuteMETs"
-```
-
-Output:
-|   | max_mets | min_mets |
-|---|----------|----------|
-| 1 |   15.7   |    0     |
-
-It is evident that our METs values are based on reality.
-
 ### Organization and Merging the Data
 
 We need to organize and merge the data. We collect data recorded in the same format:
